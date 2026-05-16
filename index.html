@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta property="og:title" content="Latihan Soal Ujian Sekolah Bahasa Indonesia Kelas 6 SD">
+    <meta property="og:description" content="Aplikasi latihan soal interaktif untuk persiapan ujian sekolah Bahasa Indonesia dengan pembahasan lengkap.">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="id_ID">
+    
+    <title>Latihan Soal Bahasa Indonesia Kelas 6 SD</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+        }
+        
+        body {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            box-shadow: var(--glass-shadow);
+            padding: 2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(25px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* PERBAIKAN: Menggunakan !important agar tidak ditimpa oleh d-flex Bootstrap */
+        .page { display: none !important; }
+        .page.active { display: flex !important; }
+
+        .subtheme-badge {
+            background: rgba(255, 255, 255, 0.5);
+            color: #2c3e50;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            margin: 4px;
+            display: inline-block;
+            border: 1px solid rgba(255,255,255,0.6);
+        }
+
+        .option-card {
+            background: rgba(255, 255, 255, 0.6);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+        .option-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .option-card.selected { background: rgba(76, 175, 80, 0.35); border-color: #4CAF50; font-weight: 600; }
+
+        .img-placeholder {
+            background: rgba(255,255,255,0.4);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 15px;
+            border: 1px dashed rgba(0,0,0,0.2);
+        }
+
+        .progress { height: 8px; border-radius: 10px; background: rgba(255,255,255,0.4); }
+        .progress-bar { background: linear-gradient(90deg, #ff9a9e, #fecfef); border-radius: 10px; transition: width 0.4s ease; }
+
+        .score-circle {
+            width: 120px; height: 120px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.35);
+            border: 4px solid rgba(255,255,255,0.7);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2rem; font-weight: bold;
+            margin: 0 auto 1.5rem;
+            color: #2c3e50;
+        }
+
+        .status-badge { padding: 5px 10px; border-radius: 50px; font-size: 0.8rem; font-weight: 600; }
+        .status-benar { background: #d4edda; color: #155724; }
+        .status-salah { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+
+    <div id="page-home" class="container min-vh-100 d-flex align-items-center justify-content-center page active fade-in">
+        <div class="glass-card text-center" style="max-width: 600px; width: 100%;">
+            <div class="mb-4 text-success"><i class="fas fa-graduation-cap fa-4x"></i></div>
+            <h2 class="fw-bold mb-2">Latihan Soal Ujian Sekolah</h2>
+            <h5 class="text-primary mb-4">Bahasa Indonesia Kelas 6 SD</h5>
+            
+            <div class="mb-4">
+                <h6 class="fw-bold">Subtema Soal:</h6>
+                <div>
+                    <span class="subtheme-badge">Menentukan Masalah Teks</span>
+                    <span class="subtheme-badge">Ide Pokok & Paragraf</span>
+                    <span class="subtheme-badge">Struktur Kalimat SPOK</span>
+                    <span class="subtheme-badge">Kosakata & Imbuhan</span>
+                    <span class="subtheme-badge">Pidato & Pengumuman</span>
+                    <span class="subtheme-badge">Cerita Fiksi & Deskripsi</span>
+                </div>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control bg-white bg-opacity-50" id="studentName" placeholder="Nama Siswa" autocomplete="off">
+                <label for="studentName"><i class="fas fa-user me-2"></i>Nama Lengkap Siswa</label>
+            </div>
+            <button class="btn btn-primary btn-lg w-100 shadow" onclick="startQuiz()">
+                <i class="fas fa-play me-2"></i>Mulai Latihan
+            </button>
+        </div>
+    </div>
+
+    <div id="page-quiz" class="container min-vh-100 d-flex align-items-center justify-content-center page fade-in">
+        <div class="glass-card" style="max-width: 700px; width: 100%;">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="fw-bold"><i class="fas fa-book-open me-2"></i>Soal <span id="current-q-num">1</span>/20</span>
+                <span class="badge bg-primary" id="student-display">-</span>
+            </div>
+            <div class="progress mb-3"><div class="progress-bar" id="progress-bar" style="width: 5%"></div></div>
+
+            <div id="quiz-content">
+                <div id="question-image" class="img-placeholder d-none">
+                    <img id="image-src" src="" alt="Ilustrasi Soal" class="img-fluid rounded mb-2" style="max-height: 250px;">
+                    <p class="mb-0 text-muted" id="image-desc"></p>
+                </div>
+                <h5 class="fw-bold mb-4" id="question-text" style="white-space: pre-line;"></h5>
+                <div id="options-container"></div>
+            </div>
+
+            <div class="d-flex justify-content-between mt-4 pt-3 border-top border-white border-opacity-25">
+                <button class="btn btn-outline-light" id="btn-prev" onclick="navigate(-1)" disabled>
+                    <i class="fas fa-arrow-left me-2"></i>Sebelumnya
+                </button>
+                <button class="btn btn-success" id="btn-next" onclick="navigate(1)">
+                    Selanjutnya<i class="fas fa-arrow-right ms-2"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="page-result" class="container min-vh-100 d-flex align-items-center justify-content-center page fade-in">
+        <div class="glass-card" style="max-width: 800px; width: 100%;">
+            <div class="text-center mb-4">
+                <div class="score-circle" id="final-score">0</div>
+                <h3 class="fw-bold">Hasil Latihan</h3>
+                <p class="mb-0">Siswa: <span id="result-name" class="fw-bold text-primary">-</span></p>
+            </div>
+
+            <div class="table-responsive bg-white bg-opacity-50 rounded-3 p-2 mb-4">
+                <table class="table table-borderless align-middle mb-0">
+                    <thead class="border-bottom border-secondary border-opacity-25">
+                        <tr>
+                            <th>No</th>
+                            <th>Status</th>
+                            <th class="text-center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="summary-table"></tbody>
+                </table>
+            </div>
+
+            <button class="btn btn-warning w-100 shadow" onclick="restartQuiz()">
+                <i class="fas fa-redo me-2"></i>Ulangi Quiz
+            </button>
+        </div>
+    </div>
+
+    <div class="modal fade" id="explanationModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content glass-card border-0" style="background: rgba(255,255,255,0.95); backdrop-filter: blur(20px);">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold"><i class="fas fa-lightbulb text-warning me-2"></i>Pembahasan Soal</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-muted mb-1" id="modal-q-num"></p>
+                    <h6 class="fw-bold mb-3" id="modal-question" style="white-space: pre-line;"></h6>
+                    <div class="bg-white bg-opacity-75 p-3 rounded-3 border">
+                        <p class="mb-0" id="modal-explanation"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // === DATA SOAL ===
+        const quizData = [
+            {
+                q: "1. Perhatikan teks berikut!\nSaat kerja bakti akan dimulai, para pemuda bingung menentukan siapa yang akan memimpin pembagian tugas. Mereka merasa kurang percaya diri karena ada ketua pemuda terpilih yang baru saja memenangkan penghargaan pemuda teladan tingkat kecamatan. Padahal, ketua pemuda tersebut sedang menghadiri urusan keluarga di luar kota dan tidak bisa ikut kerja bakti.\n\nPermasalahan yang terjadi pada teks tersebut adalah ...",
+                opts: ["Ketua pemuda melarang pemuda lain mengambil alih tugasnya.", "Kebingungan para pemuda karena mengandalkan ketua pemuda teladan yang sedang absen.", "Semua pemuda belum bisa membagi tugas selain ketua pemuda.", "Para pemuda kurang mendapatkan pengarahan dari kepala desa."],
+                correct: 1,
+                exp: "Indikator: Menentukan permasalahan teks. Jawaban: B (Kebingungan para pemuda karena mengandalkan ketua pemuda teladan yang sedang absen.)"
+            },
+            {
+                q: "2. Perhatikan paragraf berikut!\nAir bersih memiliki peran yang sangat vital untuk berbagai kebutuhan makhluk hidup dan lingkungan. Selain digunakan untuk memenuhi kebutuhan metabolisme tubuh seperti minum, air bersih juga penting untuk menjaga sanitasi dan kebersihan rumah tangga. Bahkan, dalam sektor pertanian dan industri, ketersediaan air bersih yang cukup menjadi penentu kelancaran proses produksi. Oleh karena itu, pengelolaan sumber daya air harus dilakukan dengan bijak.\n\nIde pokok dari paragraf di atas adalah ...",
+                opts: ["Penggunaan air bersih dalam sektor pertanian.", "Pentingnya air bersih untuk menjaga sanitasi rumah tangga.", "Air bersih memiliki berbagai kegunaan vital.", "Pengelolaan sumber daya air secara bijak."],
+                correct: 2,
+                exp: "Indikator: Menentukan ide pokok. Jawaban: C (Air bersih memiliki berbagai kegunaan vital.)"
+            },
+            {
+                q: "3. Perhatikan paragraf berikut!\nOlahraga secara rutin memberikan banyak dampak positif bagi kesehatan tubuh. Salah satu manfaat utamanya adalah menjaga kesehatan jantung dan melancarkan peredaran darah. Selain itu, aktivitas fisik ini juga dapat meningkatkan imunitas tubuh, memperbaiki suasana hati (mood), serta membantu mengontrol berat badan agar tetap ideal.\n\nBerdasarkan letak kalimat utamanya, paragraf di atas termasuk paragraf ...",
+                opts: ["Deduktif", "Induktif", "Campuran", "Indikasi"],
+                correct: 0,
+                exp: "Indikator: Menentukan jenis paragraf berdasarkan letak kalimat utama (di awal paragraf). Jawaban: A (Deduktif)"
+            },
+            {
+                q: "4. Tanda baca yang digunakan untuk memisahkan unsur-unsur dalam suatu pemerincian atau pembilangan adalah ....",
+                opts: ["Titik", "Koma", "Hubung", "Kutip"],
+                correct: 1,
+                exp: "Indikator: Penggunaan tanda baca. Jawaban: B (Koma)"
+            },
+            {
+                q: "5. Perhatikan kalimat berikut!\n“Pemerintah daerah mempertahankan kawasan hijau itu sebagai paru-paru kota.”\nKata dasar dari kata yang bercetak miring (mempertahankan) adalah ...",
+                opts: ["Tahan", "Pertahan", "Tahankan", "Memperta"],
+                correct: 0,
+                exp: "Indikator: Menentukan kata dasar berimbuhan (memper-tahan-kan). Jawaban: A (Tahan)"
+            },
+            {
+                q: "6. Perhatikan gambar diatas!\nDeskripsi yang sesuai berdasarkan gambar tersebut adalah ...",
+                opts: ["Kakak memotong rumput di halaman.", "Kakak menyiram tanaman bunga.", "Kakak menanam bibit buah.", "Kakak membersihkan halaman rumah."],
+                correct: 1,
+                exp: "Indikator: Menulis deskripsi berdasarkan ilustrasi gambar. Jawaban: B (Kakak menyiram tanaman bunga.)",
+                img: "https://i.ibb.co.com/zk5RPzf/soal-7-pr.jpg"
+            },
+            {
+                q: "7. Tentukan kalimat yang memiliki pola SPOKt (Subjek, Predikat, Objek, Keterangan waktu)!",
+                opts: ["Ibu membeli sayuran segar di pasar tradisional.", "Para petani memanen padi kemarin pagi.", "Ayah memperbaiki sepeda motor dengan obeng.", "Sasa belajar matematika bersama temannya."],
+                correct: 1,
+                exp: "Indikator: Menentukan pola kalimat SPOKt. Jawaban: B (Para petani [S] memanen [P] padi [O] kemarin pagi [Kt].)"
+            },
+            {
+                q: "8. Perhatikan gambar diatas!\nPernyataan yang sesuai dengan gambar tersebut adalah ...",
+                opts: ["Ibu sedang mencuci piring di wastafel.", "Ibu sedang memasak sayur di dapur.", "Ibu sedang menyajikan makanan di meja makan.", "Ibu sedang berbelanja bahan makanan di pasar."],
+                correct: 1,
+                exp: "Indikator: Kesesuaian pernyataan dengan ilustrasi gambar. Jawaban: B (Ibu sedang memasak sayur di dapur)",
+                img: "https://i.ibb.co.com/1t4TN4HP/soal-9-pr.jpg"
+            },
+            {
+                q: "9. Perhatikan teks berikut!\nMeskipun hari sudah mulai gelap dan hujan gerimis mulai turun, Doni dan adiknya tetap melanjutkan perjalanan mendaki bukit untuk mengantarkan obat kepada nenek. Jalur yang licin dan beberapa kali membuat mereka terpeleset tidak menghentikan langkah kaki mereka hingga akhirnya sampai di rumah nenek dengan selamat.\n\nWatak tokoh Doni dan adiknya dalam teks tersebut adalah ...",
+                opts: ["Suka mengeluh dan manja", "Pantang menyerah dan peduli", "Jujur dan suka pamer", "Rajin berbagi dan penakut"],
+                correct: 1,
+                exp: "Indikator: Menentukan watak tokoh cerita. Jawaban: B (Pantang menyerah dan peduli)"
+            },
+            {
+                q: "10. Perhatikan kalimat berikut!\n“Sebagai generasi muda, kita harus memiliki komitmen yang kuat untuk melestarikan budaya bangsa agar tidak punah ditelan zaman.”\n\nMakna kata yang bercetak miring pada kalimat tersebut adalah ...",
+                opts: ["Keinginan untuk mencoba hal baru", "Perjanjian atau keterikatan janji untuk melakukan sesuatu", "Pengetahuan yang luas tentang suatu hal", "Sifat suka meniru kebudayaan luar"],
+                correct: 1,
+                exp: "Indikator: Menentukan makna kata. Jawaban: B (Perjanjian atau keterikatan janji untuk melakukan sesuatu)"
+            },
+            {
+                q: "11. Tentukan opini dari kalimat berikut !",
+                opts: ["Sapi adalah hewan mamalia yang memamah biak.", "Danau Toba terletak di Provinsi Sumatera Utara.", "Novel fiksi itu sangat membosankan untuk dibaca.", "Lagu Indonesia Raya diciptakan oleh W.R. Supratman."],
+                correct: 2,
+                exp: "Indikator: Menentukan kalimat opini (bersifat subjektif/penilaian orang). Jawaban: C (Novel fiksi itu sangat membosankan untuk dibaca.)"
+            },
+            {
+                q: "12. Perhatikan pengumuman berikut !\nPENGUMUMAN Diberitahukan kepada seluruh anggota ekskul Pramuka SD Negeri 1 Merdeka, bahwa dalam rangka mempersiapkan kegiatan perkemahan sabtu-minggu (Persami), akan diadakan latihan gabungan. Latihan akan dilaksanakan pada hari Sabtu, 23 Mei 2026, pukul 14.00 WIB di lapangan utama sekolah. Setiap anggota wajib membawa tongkat Pramuka dan tali peluit masing-masing. TTD Pembina Pramuka\n\nIsi pengumuman tersebut adalah ...",
+                opts: ["Kegiatan Persami ditunda karena lapangan utama sekolah sedang diperbaiki.", "Pembina Pramuka mewajibkan siswa membawa perlengkapan tenda besar.", "Latihan gabungan Pramuka diadakan dalam rangka mempersiapkan kegiatan Persami.", "Pendaftaran ekskul Pramuka baru dibuka pada hari Sabtu, 23 Mei 2026."],
+                correct: 2,
+                exp: "Indikator: Memahami isi pengumuman. Jawaban: C (Latihan gabungan Pramuka diadakan dalam rangka mempersiapkan kegiatan Persami.)"
+            },
+            {
+                q: "13. Antonim dari kata kolektif adalah ...",
+                opts: ["Bersama", "Individual", "Kelompok", "Gabungan"],
+                correct: 1,
+                exp: "Indikator: Menentukan antonim (lawan kata dari kolektif/bersama). Jawaban: B (Individual)"
+            },
+            {
+                q: "14. Bacalah kutipan teks prosedur berikut dengan saksama!\n\"Pertama, bersihkan buah mangga lalu potong menjadi dadu kecil. Selanjutnya, masukkan potongan buah mangga, es batu, dan sedikit air ke dalam blender. Tambahkan susu kental manis sesuai selera. Terakhir, nyalakan blender selama 2 menit hingga halus, lalu tuangkan ke dalam gelas.\"\n\nIsi dari kutipan teks prosedur di atas adalah ...",
+                opts: ["Cara menanam pohon mangga di halaman.", "Langkah-langkah membuat jus mangga.", "Akibat terlalu banyak mengonsumsi es batu.", "Cara memilih buah mangga yang manis."],
+                correct: 1,
+                exp: "Indikator: Memahami isi teks prosedur. Jawaban: B (Langkah-langkah membuat jus mangga.)"
+            },
+            {
+                q: "15. Kata yang sesuai setelah diberi imbuhan adalah ...",
+                opts: ["Memperlebar", "Bersuapi", "Memakankan", "Tersakiti"],
+                correct: 0,
+                exp: "Indikator: Pembentukan kata berimbuhan yang baku/tepat. Jawaban: A (Memperlebar)"
+            },
+            {
+                q: "16. Perhatikan potongan teks berikut !\nBurung cendrawasih adalah fauna khas Papua yang terkenal karena keindahan bulunya, terutama pada burung jantan. Bulu yang berwarna-warni dan menjuntai panjang tersebut digunakan untuk menarik perhatian betina saat musim kawin. Karena keunikannya, burung ini sering dijuluki sebagai \"Burung Surga\". Namun, akibat perburuan liar dan kerusakan hutan, populasi cendrawasih kini semakin langka dan dilindungi oleh hukum.\n\nInformasi yang sesuai dengan teks tersebut adalah ...",
+                opts: ["Burung cendrawasih betina memiliki bulu yang lebih indah daripada jantan.", "Julukan \"Burung Surga\" diberikan karena burung ini hanya hidup di udara.", "Bulu indah burung cendrawasih jantan berfungsi untuk menarik perhatian betina.", "Populasi burung cendrawasih saat ini sangat aman dari ancaman perburuan."],
+                correct: 2,
+                exp: "Indikator: Menemukan informasi tersurat yang sesuai teks. Jawaban: C (Bulu indah burung cendrawasih jantan berfungsi untuk menarik perhatian betina.)"
+            },
+            {
+                q: "17. Berikut yang merupakan penutup pidato perpisahan sekolah yang baik adalah ....",
+                opts: ["Demikian yang bisa saya sampaikan, kalau ada kata yang salah ya sudahlah tidak usah dibahas lagi.", "Sekian pidato dari saya, terima kasih atas perhatian Bapak/Ibu Guru serta teman-teman, mohon maaf atas segala kesalahan.", "Akhir kata saya ucapkan selamat tinggal, semoga kalian tidak merindukan saya setelah lulus nanti.", "Demikian pidato ini, terima kasih sudah mendengarkan sampai selesai, besok jangan lupa datang lagi ke sekolah."],
+                correct: 1,
+                exp: "Indikator: Menentukan kalimat penutup pidato yang santun. Jawaban: B (Sekian pidato dari saya, terima kasih atas perhatian Bapak/Ibu Guru serta teman-teman, mohon maaf atas segala kesalahan.)"
+            },
+            {
+                q: "18. Isi pidato perpisahan kelas yang baik untuk disampaikan adalah ...",
+                opts: ["Kepada Bapak dan Ibu Guru, kami mengucapkan terima kasih yang sebesar-besarnya atas segala ilmu, bimbingan, dan kesabaran yang telah diberikan kepada kami selama enam tahun ini.", "Kepada adik-adik kelas, kalian harus rajin belajar agar nanti bisa membelikan hadiah yang mahal untuk guru-guru kita saat lulus.", "Bapak dan Ibu Guru yang kami hormati, tolong maafkan teman-teman kami yang nilainya jelek karena mereka jarang belajar di rumah.", "Kepada pihak sekolah, kami berharap agar kantin sekolah segera ditutup dan diganti dengan taman bermain yang lebih luas."],
+                correct: 0,
+                exp: "Indikator: Menentukan isi pidato perpisahan yang tepat dan relevan. Jawaban: A (Kepada Bapak dan Ibu Guru, kami mengucapkan terima kasih...)"
+            },
+            {
+                q: "19. Bacalah kutipan cerita berikut !\nKura-kura merasa sedih karena sering diejek lambat oleh kelinci. Mendengar hal itu, kancil mengusulkan agar mereka berdua melakukan lomba lari untuk membuktikan siapa yang paling gigih. Saat perlombaan dimulai, kelinci berlari sangat cepat namun tertidur di tengah jalan karena meremehkan lawannya, sehingga kura-kura yang konsisten berhasil memenangkan perlombaan.\n\nJenis cerita tersebut adalah ...",
+                opts: ["Mitos", "Fabel", "Legenda", "Hikayat"],
+                correct: 1,
+                exp: "Indikator: Menentukan jenis cerita (cerita fiksi yang tokohnya hewan berperilaku seperti manusia). Jawaban: B (Fabel)"
+            },
+            {
+                q: "20. Berikut yang termasuk kepanjangan daring adalah ...",
+                opts: ["Danau piring", "Dalam jaringan", "Darurat penting", "Dana penunjang"],
+                correct: 1,
+                exp: "Indikator: Menentukan kepanjangan dari akronim/singkatan. Jawaban: B (Dalam jaringan)"
+            }
+        ];
+
+        // === STATE MANAGEMENT ===
+        let currentQ = 0;
+        let userAnswers = new Array(quizData.length).fill(null);
+        let studentName = "";
+
+        // === DOM ELEMENTS ===
+        const pageHome = document.getElementById('page-home');
+        const pageQuiz = document.getElementById('page-quiz');
+        const pageResult = document.getElementById('page-result');
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const progressBar = document.getElementById('progress-bar');
+        const currentQNum = document.getElementById('current-q-num');
+        const studentDisplay = document.getElementById('student-display');
+        const btnPrev = document.getElementById('btn-prev');
+        const btnNext = document.getElementById('btn-next');
+        const questionImage = document.getElementById('question-image');
+        const imageDesc = document.getElementById('image-desc');
+        // const pageHome = document.getElementById('page-home');
+        const imageSrc = document.getElementById('image-src');
+
+        // === FUNCTIONS ===
+        function startQuiz() {
+            const nameInput = document.getElementById('studentName').value.trim();
+            if (!nameInput) {
+                alert("Silakan masukkan nama terlebih dahulu!");
+                return;
+            }
+            studentName = nameInput;
+            studentDisplay.textContent = studentName;
+            
+            // PERBAIKAN: Mengatur kelas active untuk memicu CSS display
+            pageHome.classList.remove('active');
+            pageQuiz.classList.add('active');
+            
+            currentQ = 0;
+            userAnswers.fill(null);
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const data = quizData[currentQ];
+            currentQNum.textContent = currentQ + 1;
+            progressBar.style.width = `${((currentQ + 1) / quizData.length) * 100}%`;
+            
+            questionText.textContent = data.q;
+            optionsContainer.innerHTML = '';
+            
+            // Handle Image/Deskripsi
+            if (data.img) {
+                questionImage.classList.remove('d-none');
+                imageSrc.src = data.img;
+                imageDesc.textContent = "";
+            } else {
+                questionImage.classList.add('d-none');
+                imageSrc.src = "";
+            }
+
+            // Render Options
+            data.opts.forEach((opt, idx) => {
+                const div = document.createElement('div');
+                div.className = `option-card ${userAnswers[currentQ] === idx ? 'selected' : ''}`;
+                div.innerHTML = `<span class="fw-bold me-2">${String.fromCharCode(65 + idx)}.</span> ${opt}`;
+                div.onclick = () => selectOption(idx);
+                optionsContainer.appendChild(div);
+            });
+
+            // Navigation Buttons State
+            btnPrev.disabled = currentQ === 0;
+            if (currentQ === quizData.length - 1) {
+                btnNext.innerHTML = 'Selesai<i class="fas fa-check ms-2"></i>';
+                btnNext.classList.remove('btn-success');
+                btnNext.classList.add('btn-warning');
+            } else {
+                btnNext.innerHTML = 'Selanjutnya<i class="fas fa-arrow-right ms-2"></i>';
+                btnNext.classList.remove('btn-warning');
+                btnNext.classList.add('btn-success');
+            }
+        }
+
+        function selectOption(index) {
+            userAnswers[currentQ] = index;
+            renderQuestion(); // Re-render to update selected state
+        }
+
+        function navigate(direction) {
+            if (direction === 1 && currentQ === quizData.length - 1) {
+                finishQuiz();
+            } else {
+                currentQ += direction;
+                renderQuestion();
+                // Re-apply fade animation smoothly
+                pageQuiz.classList.remove('fade-in');
+                void pageQuiz.offsetWidth; // trigger reflow
+                pageQuiz.classList.add('fade-in');
+            }
+        }
+
+        function finishQuiz() {
+            // Check if all answered (optional warning)
+            const unanswered = userAnswers.filter(a => a === null).length;
+            if (unanswered > 0) {
+                if (!confirm(`Masih ada ${unanswered} soal belum dijawab. Tetap selesaikan?`)) return;
+            }
+
+            // PERBAIKAN: Mengatur pergantian kelas active ke halaman hasil
+            pageQuiz.classList.remove('active');
+            pageResult.classList.add('active');
+
+            // Calculate Score
+            let correctCount = 0;
+            quizData.forEach((q, i) => {
+                if (userAnswers[i] === q.correct) correctCount++;
+            });
+            const score = (correctCount / quizData.length) * 100;
+            document.getElementById('final-score').textContent = score;
+            document.getElementById('result-name').textContent = studentName;
+
+            // Render Summary Table
+            const tbody = document.getElementById('summary-table');
+            tbody.innerHTML = '';
+            quizData.forEach((q, i) => {
+                const isCorrect = userAnswers[i] === q.correct;
+                const statusClass = isCorrect ? 'status-benar' : 'status-salah';
+                const statusText = isCorrect ? 'Benar' : 'Salah';
+                
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${i + 1}</strong></td>
+                    <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                    <td class="text-center">
+                        <button class="btn btn-sm btn-outline-primary" onclick="openExplanation(${i})">
+                            <i class="fas fa-eye me-1"></i>Lihat Pembahasan
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function openExplanation(index) {
+            const data = quizData[index];
+            document.getElementById('modal-q-num').textContent = `Soal Nomor ${index + 1}`;
+            document.getElementById('modal-question').textContent = data.q;
+            document.getElementById('modal-explanation').textContent = data.exp;
+            new bootstrap.Modal(document.getElementById('explanationModal')).show();
+        }
+
+        function restartQuiz() {
+            // PERBAIKAN: Mengatur ulang kelas active untuk kembali ke beranda/home
+            pageResult.classList.remove('active');
+            pageHome.classList.add('active');
+            document.getElementById('studentName').value = '';
+            currentQ = 0;
+            userAnswers.fill(null);
+        }
+    </script>
+</body>
+</html>
